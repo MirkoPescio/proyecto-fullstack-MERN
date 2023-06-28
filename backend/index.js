@@ -10,6 +10,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { register } from './controllers/auth.js';
+import { createPost } from './controllers/posts.js';
+import authRoutes from './routes/auth.js';
+import userRoutes from './routes/users.js';
+import postRoutes from './routes/posts.js';
+import { verifyToken } from './middleware/auth.js';
+import User from './models/User.js';
+import Post from './models/Post.js';
+import { users, posts } from "./data/index.js";
 
 /* Configuraciones */
 
@@ -43,17 +51,28 @@ const upload = multer({ storage });
 
 /* Routes with Files */
 
-app.post("/auth/register", upload.single("picture"), register);
+app.post("/auth/register", upload.single("picture"), verifyToken, register);
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 /* Routes */
 
 app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
 
 /* Mongoose Setup */
 
+mongoose.set('strictQuery', false);
+
 mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParse: true,
-    useUnifiedTopology: true,
-}).then(() => {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
     app.listen(PORT, () => console.log(`Servidor conectado en el puerto ==> ${PORT}`));
-}).catch((error) => console.log(`${error}; Error de conexión`));
+
+    // Añadir los siguientes datos 1 vez:
+    /* User.insertMany(users);
+    Post.insertMany(posts); */
+})
+.catch((error) => console.log(`${error} <== Error de conexión`));
