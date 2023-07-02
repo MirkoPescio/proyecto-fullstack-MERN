@@ -68,9 +68,9 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
       <IconButton onClick={() => patchFriend()}
       sx={{ backgroundColor: primaryLight, p: "0.6rem" }}>
         {isFriend ? (
-            <PersonRemoveOutlined sx={{ color: primaryDark }} />
+            <PersonRemoveOutlined sx={{ color: primaryDark }} onClick={() => window.location.reload()} />
         ): (
-            <PersonAddOutlined sx={{ color: primaryDark }} />
+            <PersonAddOutlined sx={{ color: primaryDark }} onClick={() => window.location.reload()} />
         )}
       </IconButton>
     </FlexBetween>
