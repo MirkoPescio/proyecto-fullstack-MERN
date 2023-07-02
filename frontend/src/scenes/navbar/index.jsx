@@ -57,7 +57,7 @@ const Navbar = () => {
             },
           }}
         >
-          Sociopedia
+          Proyecto MERN
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
